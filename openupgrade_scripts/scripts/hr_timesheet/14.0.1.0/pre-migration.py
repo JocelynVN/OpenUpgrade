@@ -28,6 +28,7 @@ def migrate(env, version):
         ],
         True,
     )
+<<<<<<< HEAD
     openupgrade.delete_record_translations(
         env.cr,
         "hr_timesheet",
@@ -36,4 +37,6 @@ def migrate(env, version):
             "group_hr_timesheet_approver",
         ],
     )
+=======
+>>>>>>> refs/remotes/OCA/14.0
     _fill_task_overtime(env)

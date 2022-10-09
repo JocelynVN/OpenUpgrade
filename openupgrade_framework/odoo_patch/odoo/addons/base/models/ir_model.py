@@ -15,6 +15,7 @@ from odoo.addons.base.models.ir_model import (
 
 
 def _drop_table(self):
+<<<<<<< HEAD
     """ Never drop tables """
     for model in self:
         if self.env.get(model.model) is not None:
@@ -33,6 +34,26 @@ IrModel._drop_table = _drop_table
 
 def _drop_column(self):
     """ Never drop columns """
+=======
+    """Never drop tables"""
+    for model in self:
+        if self.env.get(model.model) is not None:
+            openupgrade.message(
+                self.env.cr,
+                "Unknown",
+                False,
+                False,
+                "Not dropping the table or view of model %s",
+                model.model,
+            )
+
+
+IrModel._drop_table = _drop_table
+
+
+def _drop_column(self):
+    """Never drop columns"""
+>>>>>>> refs/remotes/OCA/14.0
     for field in self:
         if field.name in models.MAGIC_COLUMNS:
             continue

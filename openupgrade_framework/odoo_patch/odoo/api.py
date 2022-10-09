@@ -8,7 +8,11 @@ _logger = logging.getLogger(__name__)
 
 
 class FakeRecord:
+<<<<<<< HEAD
     """Artificial construct to handle delete(records) submethod """
+=======
+    """Artificial construct to handle delete(records) submethod"""
+>>>>>>> refs/remotes/OCA/14.0
 
     def __new__(cls):
         return object.__new__(cls)

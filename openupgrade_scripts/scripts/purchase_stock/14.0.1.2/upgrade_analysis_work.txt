@@ -1,5 +1,6 @@
 ---Models in module 'purchase_stock'---
 new model vendor.delay.report [sql_view]
+<<<<<<< HEAD
 # NOTHING TO DO
 
 ---Fields in module 'purchase_stock'---
@@ -13,6 +14,17 @@ purchase_stock / res.partner              / purchase_line_ids (one2many)  : NEW 
 purchase_stock / stock.warehouse.orderpoint / supplier_id (many2one)        : NEW relation: product.supplierinfo
 # NOTHING TO DO
 
+=======
+---Fields in module 'purchase_stock'---
+purchase_stock / product.product          / purchase_order_line_ids (one2many): NEW relation: purchase.order.line
+purchase_stock / purchase.order           / effective_date (datetime)     : NEW isfunction: function, stored
+purchase_stock / purchase.order.line      / product_description_variants (char): NEW
+purchase_stock / purchase.order.line      / propagate_date (boolean)      : DEL
+purchase_stock / purchase.order.line      / propagate_date_minimum_delta (integer): DEL
+purchase_stock / res.company              / days_to_purchase (float)      : NEW
+purchase_stock / res.partner              / purchase_line_ids (one2many)  : NEW relation: purchase.order.line
+purchase_stock / stock.warehouse.orderpoint / supplier_id (many2one)        : NEW relation: product.supplierinfo
+>>>>>>> refs/remotes/OCA/14.0
 ---XML records in module 'purchase_stock'---
 NEW ir.actions.act_window: purchase_stock.action_purchase_vendor_delay_report
 DEL ir.actions.act_window: purchase_stock.purchase_open_picking

@@ -20,6 +20,10 @@ _xmlid_renames_sale_project = [
 ]
 
 
+<<<<<<< HEAD
 @openupgrade.migrate()
+=======
+@openupgrade.migrate(no_version=True)
+>>>>>>> refs/remotes/OCA/14.0
 def migrate(env, version):
     openupgrade.rename_xmlids(env.cr, _xmlid_renames_sale_project)

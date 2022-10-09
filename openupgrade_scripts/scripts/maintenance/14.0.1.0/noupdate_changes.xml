@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
+<<<<<<< HEAD
   <record id="maintenance_equipment_category_comp_rule" model="ir.rule">
 <!--    <field name="global"/>-->
   </record>
@@ -12,6 +13,21 @@
   <record id="maintenance_team_comp_rule" model="ir.rule">
 <!--    <field name="global"/>-->
   </record>
+=======
+  <!-- No real changes, so no need to write the records -->
+  <!-- <record id="maintenance_equipment_category_comp_rule" model="ir.rule">
+    <field name="global"/>
+  </record>
+  <record id="maintenance_equipment_comp_rule" model="ir.rule">
+    <field name="global"/>
+  </record>
+  <record id="maintenance_request_comp_rule" model="ir.rule">
+    <field name="global"/>
+  </record>
+  <record id="maintenance_team_comp_rule" model="ir.rule">
+    <field name="global"/>
+  </record> -->
+>>>>>>> refs/remotes/OCA/14.0
   <record id="mt_cat_mat_assign" model="mail.message.subtype">
     <field name="parent_id" ref="mt_mat_assign"/>
   </record>

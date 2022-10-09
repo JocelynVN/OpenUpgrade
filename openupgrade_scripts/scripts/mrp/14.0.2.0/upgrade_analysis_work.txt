@@ -11,6 +11,7 @@ new model mrp.production.backorder [transient]
 new model mrp.production.backorder.line [transient]
 # NOTHING TO DO: abstract + transient models
 
+<<<<<<< HEAD
 obsolete model mrp.routing
 obsolete model mrp.workorder.line
 # NOTHING TO DO: obsolete models
@@ -118,6 +119,118 @@ mrp          / mrp.workorder.line       / qty_to_consume (float)        : DEL
 mrp          / mrp.workorder.line       / raw_workorder_id (many2one)   : DEL relation: mrp.workorder
 mrp          / mrp.workorder            / finished_workorder_line_ids (one2many): DEL relation: mrp.workorder.line
 # NOTHING TO DO: obsolete model
+=======
+obsolete model mrp.workorder.line
+# NOTHING TO DO: obsolete models
+
+---Fields in module 'mrp'---
+mrp          / mrp.document             / key (char)                    : previously in module website
+mrp          / mrp.document             / theme_template_id (many2one)  : previously in module website_theme_install
+mrp          / mrp.document             / website_id (many2one)         : previously in module website
+mrp          / mrp.document             / website_url (char)            : previously in module website
+# NOTHING TO DO: falsy analysis, but if anything, handled by ORM
+
+mrp          / mrp.bom                  / consumption (selection)       : now required, req_default: function
+mrp          / mrp.bom                  / consumption (selection)       : selection_keys is now '['flexible', 'strict', 'warning']' ('['flexible', 'strict']')
+mrp          / mrp.workorder            / consumption (selection)       : selection_keys is now '['flexible', 'strict', 'warning']' ('['flexible', 'strict']')
+# DONE: pre-migration: Switch 'flexible' to 'warning' for benefiting from this new feature
+
+mrp          / mrp.production           / consumption (selection)       : NEW required, selection_keys: ['flexible', 'strict', 'warning'], req_default: function, hasdefault
+# DONE: pre-migration: Init the field with its related BoM value
+
+obsolete model mrp.routing
+mrp          / mrp.bom                  / operation_ids (one2many)      : NEW relation: mrp.routing.workcenter
+mrp          / mrp.routing              / operation_ids (one2many)      : DEL relation: mrp.routing.workcenter
+mrp          / mrp.routing.workcenter   / bom_id (many2one)             : NEW relation: mrp.bom
+mrp          / mrp.routing.workcenter   / routing_id (many2one)         : DEL relation: mrp.routing, required
+mrp          / mrp.bom                  / routing_id (many2one)         : DEL relation: mrp.routing
+# DONE: pre-migration: duplicate mrp.routing.workcenter records per assigned BoM, filling bom_id
+# TODO: There can be mrp.routing without assigned BoMs that will be in a limbo after this migration. This will be highlighted through mrp.routing.workcenter having nulls in `bom_id` field. One possible strategy is to create fake BoMs for that routings with a wildcard product.
+
+mrp          / mrp.bom.byproduct        / routing_id (many2one)         : DEL relation: mrp.routing
+mrp          / mrp.bom.line             / routing_id (many2one)         : DEL relation: mrp.routing
+# NOTHING TO DO: mrp.routing model is obsolete
+
+mrp          / mrp.production           / routing_id (many2one)         : DEL relation: mrp.routing
+# DONE: post-migration: Populate workorders for draft production orders from old routing
+
+mrp          / mrp.production           / _order                        : _order is now 'priority desc, date_planned_start asc,id' ('date_planned_start asc,id')
+# NOTHING TO DO
+
+mrp          / mrp.production           / backorder_sequence (integer)  : NEW hasdefault
+# NOTHING TO DO: new feature
+
+mrp          / mrp.production           / date_deadline (datetime)      : now a function
+mrp          / mrp.production           / date_start_wo (datetime)      : DEL
+# NOTHING TO DO
+
+mrp          / mrp.production           / lot_producing_id (many2one)   : NEW relation: stock.production.lot
+mrp          / mrp.production           / qty_producing (float)         : NEW
+# NOTHING TO DO: fields from mrp.abstract.workorder (used in old mrp.product.produce wizard)
+
+mrp          / mrp.production           / priority (selection)          : selection_keys is now '['0', '1']' ('['0', '1', '2', '3']')
+# DONE: post-migration: merge 1 to 0, and 2 and 3 to 1
+
+mrp          / mrp.production           / product_description_variants (char): NEW
+# TODO: new feature, may be filled in some cases
+
+mrp          / mrp.production           / production_location_id (many2one): is now stored
+mrp          / mrp.production           / production_location_id (many2one): not related anymore
+mrp          / mrp.production           / production_location_id (many2one): now a function
+# NOTHING TO DO: computed in load
+
+mrp          / mrp.production           / propagate_date (boolean)      : DEL
+mrp          / mrp.production           / propagate_date_minimum_delta (integer): DEL
+# NOTHING TO DO: not used anymore
+
+mrp          / mrp.production           / state (selection)             : selection_keys is now '['cancel', 'confirmed', 'done', 'draft', 'progress', 'to_close']' ('['cancel', 'confirmed', 'done', 'draft', 'planned', 'progress', 'to_close']')
+DONE: post-migration: map 'planned' to 'confirmed'/'progress'/'done' using _compute_state method
+
+mrp          / mrp.routing              / active (boolean)              : DEL
+mrp          / mrp.routing              / code (char)                   : DEL
+mrp          / mrp.routing              / company_id (many2one)         : DEL relation: res.company
+mrp          / mrp.routing              / name (char)                   : DEL required
+mrp          / mrp.routing              / note (text)                   : DEL
+# NOTHING TO DO: obsolete model
+
+mrp          / mrp.routing.workcenter   / batch (selection)             : DEL required, selection_keys: ['no', 'yes'], req_default: function
+mrp          / mrp.routing.workcenter   / batch_size (float)            : DEL
+# NOTHING TO DO: obsolete
+
+mrp          / mrp.routing.workcenter   / company_id (many2one)         : not related anymore
+# NOTHING TO DO
+
+mrp          / mrp.routing.workcenter   / worksheet_type (selection)    : selection_keys is now '['google_slide', 'pdf', 'text']' ('['google_slide', 'pdf']')
+# NOTHING TO DO: new option 'text'
+
+mrp          / mrp.workorder            / activity_ids (one2many)       : DEL relation: mail.activity
+mrp          / mrp.workorder            / message_follower_ids (one2many): DEL relation: mail.followers
+mrp          / mrp.workorder            / message_ids (one2many)        : DEL relation: mail.message
+mrp          / mrp.workorder            / message_main_attachment_id (many2one): DEL relation: ir.attachment
+mrp          / mrp.workorder            / website_message_ids (one2many): DEL relation: mail.message
+# NOTHING TO DO: losing mail mixins
+
+mrp          / mrp.workorder            / capacity (float)              : DEL
+# NOTHING TO DO: unused field
+
+mrp          / mrp.workorder            / finished_lot_id (many2one)    : not stored anymore
+mrp          / mrp.workorder            / finished_lot_id (many2one)    : now a function
+mrp          / mrp.workorder            / qty_producing (float)         : not stored anymore
+mrp          / mrp.workorder            / qty_producing (float)         : now a function
+# NOTHING TO DO: non-stored computes
+
+mrp          / mrp.workorder.line       / finished_workorder_id (many2one): DEL relation: mrp.workorder
+mrp          / mrp.workorder.line       / lot_id (many2one)             : DEL relation: stock.production.lot
+mrp          / mrp.workorder.line       / move_id (many2one)            : DEL relation: stock.move
+mrp          / mrp.workorder.line       / product_id (many2one)         : DEL relation: product.product, required
+mrp          / mrp.workorder.line       / product_uom_id (many2one)     : DEL relation: uom.uom
+mrp          / mrp.workorder.line       / qty_done (float)              : DEL
+mrp          / mrp.workorder.line       / qty_reserved (float)          : DEL
+mrp          / mrp.workorder.line       / qty_to_consume (float)        : DEL
+mrp          / mrp.workorder.line       / raw_workorder_id (many2one)   : DEL relation: mrp.workorder
+mrp          / mrp.workorder            / finished_workorder_line_ids (one2many): DEL relation: mrp.workorder.line
+# TODO: Not clear if there should be any conversion
+>>>>>>> refs/remotes/OCA/14.0
 
 mrp          / procurement.group        / mrp_production_ids (one2many) : NEW relation: mrp.production
 # NOTHING TO DO: one2many

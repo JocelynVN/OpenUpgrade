@@ -1,6 +1,17 @@
 ---Models in module 'project_timesheet_holidays'---
 ---Fields in module 'project_timesheet_holidays'---
+<<<<<<< HEAD
 project_timesheet_holidays / hr.leave.type            / timesheet_generate (boolean)  : now a function
 project_timesheet_holidays / hr.leave.type            / timesheet_task_id (many2one)  : now a function
 ---XML records in module 'project_timesheet_holidays'---
 # NOTHING TO DO
+=======
+# NOTHING TO DO
+
+project_timesheet_holidays / hr.leave.type            / timesheet_generate (boolean)  : now a function
+project_timesheet_holidays / hr.leave.type            / timesheet_task_id (many2one)  : now a function
+# NOTHING TO DO: Fields are now computed, but store=True, so fields are still stored
+
+---XML records in module 'project_timesheet_holidays'---
+# NOTHING TO DO
+>>>>>>> refs/remotes/OCA/14.0

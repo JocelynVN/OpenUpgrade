@@ -39,6 +39,7 @@ def fill_calendar_recurrence_table(env):
                 create_uid,create_date,write_uid,write_date
             FROM calendar_event
             WHERE recurrency AND recurrence_id IS NULL
+<<<<<<< HEAD
                 AND (
                     rrule_type != 'weekly'
                     OR (
@@ -110,6 +111,43 @@ def create_recurrent_events(env):
             )._apply_recurrence(
                 specific_values_creation=values,
             )
+=======
+                AND (recurrent_id IS NULL OR recurrent_id = 0)
+                AND (
+                    rrule_type != 'weekly'
+                    OR (
+                        rrule_type = 'weekly' AND
+                        (mo OR tu OR we OR th OR fr OR sa OR su)
+                    )
+                )
+            RETURNING id,base_event_id
+        )
+        UPDATE calendar_event ce
+        SET recurrence_id = recur.id
+        FROM recur
+        WHERE recur.base_event_id = ce.id
+        """,
+    )
+    openupgrade.logged_query(
+        env.cr,
+        """
+        UPDATE calendar_event ce
+        SET recurrence_id = ce2.recurrence_id, recurrency = True
+        FROM calendar_event ce2
+        WHERE ce.recurrence_id IS NULL AND ce.recurrent_id = ce2.id
+        """,
+    )
+
+
+@openupgrade.logging()
+def create_recurrent_events(env):
+    """In v14, now all occurrences of recurrent events are created as real records, not
+    virtual ones, so we need to regenerate them for all the existing ones.
+    But we do not create an activity on the real records.
+    """
+    recs = env["calendar.recurrence"].search([("base_event_id", "!=", False)])
+    recs.with_context(default_activity_ids=[(6, 0, [])])._apply_recurrence()
+>>>>>>> refs/remotes/OCA/14.0
 
 
 @openupgrade.migrate()

@@ -20,6 +20,10 @@ def migrate(env, version):
         ],
     )
     openupgrade.rename_tables(env.cr, [("crm_lead_tag_rel", "crm_tag_rel")])
+<<<<<<< HEAD
+=======
+    openupgrade.remove_tables_fks(env.cr, ["crm_partner_binding"])
+>>>>>>> refs/remotes/OCA/14.0
     # Disappeared constraint
     openupgrade.logged_query(
         env.cr,

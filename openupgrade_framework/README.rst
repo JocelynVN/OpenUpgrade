@@ -41,6 +41,12 @@ OpenUpgrade migration scripts:
 * Run migration scripts for modules that are installed as new dependencies
   of upgraded modules (when there are such scripts for those particular
   modules)
+<<<<<<< HEAD
+=======
+* Production databases generated with demo data, will be transformed to
+  non-demo ones. If you want to avoid that, you have to pass through the
+  environment variable OPENUPGRADE_USE_DEMO, the value "yes".
+>>>>>>> refs/remotes/OCA/14.0
 
 For detailed documentation see:
 

@@ -3,6 +3,11 @@ from openupgradelib import openupgrade
 
 @openupgrade.migrate()
 def migrate(env, version):
+<<<<<<< HEAD
+=======
+    openupgrade.rename_models(env.cr, [("event.answer", "event.question.answer")])
+
+>>>>>>> refs/remotes/OCA/14.0
     openupgrade.rename_tables(
         env.cr,
         [("event_answer", "event_question_answer")],

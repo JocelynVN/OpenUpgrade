@@ -7,6 +7,7 @@ name: Test OpenUpgrade migration
 
 on:
   push:
+<<<<<<< HEAD
     branches: ["14.0*"]
   pull_request:
 
@@ -24,6 +25,30 @@ jobs:
       PGHOST: "localhost"
       PGPASSWORD: "odoo"
       PGUSER: "odoo"
+=======
+    branches:
+      - "14.0"
+      - "14.0-ocabot-*"
+  pull_request:
+    branches:
+      - "14.0*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DB: "openupgrade"
+      DB_HOST: "localhost"
+      DB_PASSWORD: "odoo"
+      DB_PORT: 5432
+      DB_USERNAME: "odoo"
+      DOWNLOADS: https://github.com/OCA/OpenUpgrade/releases/download/databases
+      ODOO: "./odoo/odoo-bin"
+      PGHOST: "localhost"
+      PGPASSWORD: "odoo"
+      PGUSER: "odoo"
+      OPENUPGRADE_USE_DEMO: "yes"
+>>>>>>> refs/remotes/OCA/14.0
     steps:
       - name: Set up Python
         uses: actions/setup-python@v2

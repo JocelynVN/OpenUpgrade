@@ -3,4 +3,8 @@
 ---XML records in module 'membership'---
 NEW ir.model.access: membership.access_membership_invoice
 NEW ir.ui.menu: membership.menu_membership_products
+<<<<<<< HEAD
 # NOTHING TO DO: noupdate="0" records
+=======
+# NOTHING TO DO
+>>>>>>> refs/remotes/OCA/14.0

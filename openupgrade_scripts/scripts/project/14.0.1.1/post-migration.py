@@ -33,6 +33,7 @@ def _fill_res_users_m2m_tables(env):
         JOIN mail_followers mf ON mf.res_model = 'project.project' AND mf.res_id = pp.id
         JOIN res_users ru ON ru.partner_id = mf.partner_id AND NOT ru.share
         WHERE pp.privacy_visibility = 'followers'
+<<<<<<< HEAD
         """,
     )
     openupgrade.logged_query(
@@ -61,6 +62,62 @@ def _fill_res_users_m2m_tables(env):
         SELECT pt.id, rel.res_users_id
         FROM project_allowed_portal_users_rel rel
         JOIN project_task pt ON pt.project_id = rel.project_project_id
+=======
+        UNION
+        SELECT pp.id, ru.id
+        FROM project_project pp
+        JOIN mail_followers mf ON mf.res_model = 'project.project' AND mf.res_id = pp.id
+        JOIN mail_channel_partner mcp ON mcp.channel_id = mf.channel_id
+        JOIN res_users ru ON ru.partner_id = mcp.partner_id AND NOT ru.share
+        WHERE pp.privacy_visibility = 'followers'
+        ON CONFLICT DO NOTHING
+        """,
+    )
+    openupgrade.logged_query(
+        env.cr,
+        """
+        INSERT INTO project_allowed_portal_users_rel
+        (project_project_id, res_users_id)
+        SELECT DISTINCT pp.id, ru.id
+        FROM project_project pp
+        JOIN mail_followers mf ON mf.res_model = 'project.project' AND mf.res_id = pp.id
+        JOIN res_partner rp ON mf.partner_id = rp.id
+            OR mf.partner_id = rp.commercial_partner_id
+        JOIN res_users ru ON ru.partner_id = rp.id AND ru.share
+        WHERE pp.privacy_visibility = 'portal'
+        """,
+    )
+    openupgrade.logged_query(
+        env.cr,
+        """
+        INSERT INTO project_task_res_users_rel
+        (project_task_id, res_users_id)
+        SELECT pt.id, rel.res_users_id
+        FROM project_allowed_internal_users_rel rel
+        JOIN project_task pt ON pt.project_id = rel.project_project_id
+        UNION
+        SELECT pt.id, pt.user_id
+        FROM project_task pt
+        JOIN project_project pp ON pp.id = pt.project_id
+        WHERE pp.privacy_visibility = 'followers' AND pt.user_id IS NOT NULL
+        UNION
+        SELECT pt.id, rel.res_users_id
+        FROM project_allowed_portal_users_rel rel
+        JOIN project_task pt ON pt.project_id = rel.project_project_id
+        JOIN mail_followers mf ON mf.res_model = 'project.task' AND mf.res_id = pt.id
+        JOIN res_partner rp ON mf.partner_id = rp.id
+            OR mf.partner_id = rp.commercial_partner_id
+        JOIN res_users ru ON ru.partner_id = rp.id
+            AND ru.share AND ru.id = rel.res_users_id
+        UNION
+        SELECT pt.id, ru.id AS res_users_id
+        FROM project_task pt
+        JOIN mail_followers mf ON mf.res_model = 'project.task' AND mf.res_id = pt.id
+        JOIN res_users ru ON ru.partner_id = mf.partner_id AND NOT ru.share
+        JOIN project_project pp ON pp.id = pt.project_id
+        WHERE pp.privacy_visibility = 'followers'
+        ON CONFLICT DO NOTHING
+>>>>>>> refs/remotes/OCA/14.0
         """,
     )
 

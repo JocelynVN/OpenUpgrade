@@ -2,4 +2,8 @@
 ---Fields in module 'product_margin'---
 ---XML records in module 'product_margin'---
 NEW ir.model.access: product_margin.access_product_margin
+<<<<<<< HEAD
 # NOTHING TO DO: noupdate="0" records
+=======
+# NOTHING TO DO: noupdate = 0 record
+>>>>>>> refs/remotes/OCA/14.0

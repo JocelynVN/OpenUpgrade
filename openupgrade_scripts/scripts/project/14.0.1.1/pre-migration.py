@@ -13,7 +13,11 @@ def _set_default_rating_status_period(env):
 
 
 def fast_fill_stored_calculated_fields(env):
+<<<<<<< HEAD
     """ Faster way """
+=======
+    """Faster way"""
+>>>>>>> refs/remotes/OCA/14.0
     openupgrade.logged_query(
         env.cr,
         """
